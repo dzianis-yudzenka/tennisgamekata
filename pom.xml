@@ -6,43 +6,84 @@
 <!--
   ~ @author <a href="mailto:Dzianis.Yudzenka@gmail.com">Dzianis Yudzenka</a>
   ~ @version 1.0
-  ~ @since 4/19/2016
+  ~ @since 19/4/2016
 -->
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
+
+<!--
+    Run "mvn package" to build the distribution that can be handed out
+-->
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>tennisgamekata</groupId>
+    <groupId>fr.societegenerale</groupId>
     <artifactId>tennisgamekata</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <!--<packaging>jar</packaging>-->
+    <packaging>takari-jar</packaging> <!-- The Takari Lifecycle -->
+    <!--
+        MajorVersion: 1.2.1
+        MinorVersion: 2.0
+        IncrementalVersion: 1.2-SNAPSHOT
+        BuildNumber: 1.4.2-12
+        Qualifier: 1.2-beta-2
+    -->
+    <version>1.0<!--.${maven.build.timestamp)--></version>
+    <name>${artifactName}</name>
+    <description>Tennis Game Kata</description>
+
+    <developers>
+        <developer>
+            <id>DYU</id>
+            <name>Dzianis Yudzenka</name>
+            <email>Dzianis.Yudzenka@gmail.com</email>
+            <url>https://www.linkedin.com/in/DzianisYudzenka</url>
+            <organization>Société Générale</organization>
+            <organizationUrl>https://www.societegenerale.fr/</organizationUrl>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+                <role>tester</role>
+            </roles>
+            <timezone>+1</timezone>
+            <properties>
+                <picUrl>https://goo.gl/rbn0QE</picUrl>
+            </properties>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <junit.version>4.12</junit.version>
+        <skipTests>false</skipTests>
+        <antrun.version>1.8</antrun.version>
 
         <!-- PLUGINS -->
         <maven-compiler.version>3.5.1</maven-compiler.version>
+        <maven-clean.version>3.0.0</maven-clean.version>
+        <sonar-maven.version>3.2</sonar-maven.version>
+        <maven-surefire.version>2.19.1</maven-surefire.version>
+        <takari-lifecycle.version>1.12.1</takari-lifecycle.version>
+        <maven-wrapper.version>0.1.6</maven-wrapper.version>
+        <wrapper-maven.version>0.0.5</wrapper-maven.version>
 
+        <!-- PATHS -->
+        <fs>${file.separator}</fs>
+        <dist>dist</dist>
+        <docs>docs</docs>
+        <logs>logs</logs>
+        <images>images</images>
+        <artifactName>${project.artifactId}</artifactName>
+        <dist.path>${project.build.directory}${fs}${dist}</dist.path>
+        <artifact>dzianis-yudzenka-${artifactName}-${project.version}</artifact>
+        <dist.artifact>${project.basedir}${fs}${dist}${fs}${artifact}</dist.artifact>
+        <tree.output>${dist.path}${fs}${docs}${fs}tree.txt</tree.output>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-all</artifactId>
-            <version>1.3</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
     <build>
+        <finalName>${artifactName}</finalName>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -56,7 +97,207 @@
                     <compilerArgument>-Xlint</compilerArgument>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>${maven-clean.version}</version>
+                <executions>
+                    <execution>
+                        <id>auto-clean</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>${sonar-maven.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire.version}</version>
+                <configuration>
+                    <skipTests>${skipTests}</skipTests>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>io.takari.maven.plugins</groupId>
+                <artifactId>takari-lifecycle-plugin</artifactId>
+                <version>${takari-lifecycle.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <showWarnings>true</showWarnings>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.rimerosolutions.maven.plugins</groupId>
+                <artifactId>wrapper-maven-plugin</artifactId>
+                <version>${wrapper-maven.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>write-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>${basedir}${fs}src${fs}main${fs}resources${fs}maven.properties</outputFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>${antrun.version}</version>
+                <executions>
+                    <execution>
+                        <id>mkdirs</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <echo message="Creating ${docs}, ${logs}, and ${images} directories..."/>
+                                <mkdir dir="${docs}"/>
+                                <mkdir dir="${logs}"/>
+                                <mkdir dir="${images}"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>distribution</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <echo message="Copying files for the distribution..."/>
+                                <copy todir="${dist.path}">
+                                    <fileset dir="${basedir}">
+                                        <include name="**"/>
+                                        <include name="${docs}${fs}api${fs}**"/>
+                                        <include name="${docs}${fs}*.md"/>
+                                        <exclude name="${docs}${fs}*.pdf"/>
+                                        <exclude name="*.iml"/>
+                                        <exclude name=".idea${fs}**"/>
+                                        <exclude name="${dist}${fs}**"/>
+                                        <exclude name="${logs}${fs}**"/>
+                                        <exclude name="target${fs}**"/>
+                                    </fileset>
+                                </copy>
+                                <echo message="Running '${tree.command}'..."/>
+                                <exec dir="${dist.path}" executable="${executable}" osfamily="${os.family}"
+                                      output="${tree.output}">
+                                    <arg line="${tree.command}"/>
+                                </exec>
+                                <echo message="Creating zip distributive..."/>
+                                <zip destfile="${dist.artifact}-${dist}.zip" basedir="${dist.path}" includes="**"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>Windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <os.family>windows</os.family>
+                <executable>cmd</executable>
+                <tree.command>/c tree /f /a | more +3</tree.command>
+                <tmp.artifact>${fs}tmp${fs}${artifactName}${fs}</tmp.artifact>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>UNIX</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                </os>
+            </activation>
+            <properties>
+                <os.family>unix</os.family>
+                <executable>bash</executable>
+                <tree.command>-c tree -f -a</tree.command>
+                <tmp.artifact>${fs}tmp${fs}${artifactName}${fs}</tmp.artifact>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <profile.id>dev</profile.id>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>prod</id>
+            <properties>
+                <profile.id>prod</profile.id>
+            </properties>
+        </profile>
+
+    </profiles>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.takari</groupId>
+            <artifactId>maven-wrapper</artifactId>
+            <version>${maven-wrapper.version}</version>
+        </dependency>
+
+        <!-- TEST DEPENDENCIES -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <version>1.3</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 </project>

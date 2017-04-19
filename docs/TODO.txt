@@ -1,0 +1,10 @@
+-----
+TODOs|
+-----/
+TODO: Docker image
+TODO: i18n
+TODO: protect java code with obfuscator, like ProGard/Ygard
+TODO: install with exe4j
+TODO: full test coverage
+TODO: logs +zip
+TODO: improve Time/Memory consumption

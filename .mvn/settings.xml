@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright © Dzianis Yudzenka, 2017. All rights reserved.
+  -->
+
+<!--
+  ~ @author <a href="mailto:Dzianis.Yudzenka@gmail.com">Dzianis Yudzenka</a>
+  ~ @version 1.0
+  ~ @since 4/19/2017
+-->
+<settings>
+    <mirrors>
+        <mirror>
+            <id>nexus-m2</id>
+            <mirrorOf>*</mirrorOf>
+            <url>http://repo.org.ru/nexus/content/groups/repo-all-m2</url>
+            <name>Nexus M2</name>
+        </mirror>
+    </mirrors>
+</settings>
