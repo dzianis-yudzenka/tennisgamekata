@@ -18,4 +18,9 @@ public class TestHelper {
         IntStream.rangeClosed(1, player1Points).forEach((Integer) -> game.winPoint(player1));
         IntStream.rangeClosed(1, player2Points).forEach((Integer) -> game.winPoint(player2));
     }
+
+    public static void createSetScore(int player1Sets, int player2Sets) {
+        IntStream.rangeClosed(1, player1Sets).forEach((Integer) -> game.winSet(player1.getName()));
+        IntStream.rangeClosed(1, player2Sets).forEach((Integer) -> game.winSet(player2.getName()));
+    }
 }

@@ -12,7 +12,11 @@ package fr.societegenerale.tennis;
 public interface TennisGame {
     void winPoint(TennisPlayer player);
 
+    void winSet(String playerName);
+
     String getScore();
+
+    String getSetScore();
 
     boolean gameWon();
 }

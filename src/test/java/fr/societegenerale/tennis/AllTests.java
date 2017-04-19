@@ -15,7 +15,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         TennisGameImplTest.class,
-        TennisPlayerImplTest.class
+        TennisPlayerImplTest.class,
+        TennisSetAndTieBreakTest.class
 })
 public class AllTests {
 }
